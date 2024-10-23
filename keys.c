@@ -50,12 +50,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xos.h>
-#include <xpm.h>
+#include <X11/Xlib.h>        //replace all to the left with raylib
+#include <X11/Xutil.h>       //
+#include <X11/Xos.h>         // 
+#include <xpm.h>             //
 
-#include "bitmaps/mouse.xpm"
+#include "bitmaps/mouse.xpm" //replace with png
 #include "bitmaps/larrow.xpm"
 #include "bitmaps/rarrow.xpm"
 
@@ -119,12 +119,12 @@ void SetUpKeys(display, window, colormap)
 #endif
 {
     XpmAttributes   attributes;
-    int             XpmErrorStatus;
+    int             XpmErrorStatus; //check for errors
 
     attributes.valuemask = XpmColormap;
     attributes.colormap = colormap;
 
-    XpmErrorStatus = XpmCreatePixmapFromData(display, window, mouse_xpm,
+    XpmErrorStatus = XpmCreatePixmapFromData(display, window, mouse_xpm, //forms images from pixmap and colormap
         &mouse, &mouseM, &attributes);
     HandleXPMError(display, XpmErrorStatus, "InitialiseKeys(mouse)");
 
@@ -150,10 +150,10 @@ static void DoText(display, window)
 	Window window;
 #endif
 {
-	char string[80];
+  char string[80]; //max string length is 80. Replace with global constant
 	int y;
 	int x;
-
+	
 	SetCurrentMessage(display, messWindow, "Drink driving kills!", False);
 
 	y = 120;
@@ -187,7 +187,7 @@ static void DoText(display, window)
 
 	y = 250;
 	x = 30;
-
+	//menu text
 	strcpy(string, "<s> = Sfx On/Off");
 	DrawShadowText(display, window, textFont, string, x, y, yellow);
 	y += textFont->ascent + GAP;

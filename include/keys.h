@@ -74,10 +74,64 @@ enum KeysStates
  */
 
 #if NeedFunctionPrototypes
+
+/**
+ * Shows a menu that allows the user to change key binds
+ *
+ * @param Display *display display pointer
+ * @param Window window display window
+ * @param Colormap colormap menu colormap
+ * @pre 
+ * @return void 
+ * @post menu appears that allows the user to change keybinds
+ * 
+ */
 void SetUpKeys(Display *display, Window window, Colormap colormap);
+
+/**
+ * controls key controls depending on game state
+ *
+ * @param Display *display display pointer
+ * @param Window window display window
+ * @pre the game is in a game state
+ * @return void 
+ * @post allows inputs into game
+ * 
+ */
 void Keys(Display *display, Window window);
+
+/**
+ * does intro titles sequence
+ *
+ * @param Display *display display pointer
+ * @param Window window display window
+ * @pre 
+ * @return void 
+ * @post 
+ * 
+ */
 void RedrawKeys(Display *display, Window window);
+
+/**
+ * frees keys and mouse from game control
+ *
+ * @param Display *display display pointer
+ * @pre the program is in control of inputs
+ * @return void 
+ * @post keys and mouse is freed
+ * 
+ */
 void FreeKeyControl(Display *display);
+
+/**
+ * resets input state
+ *
+ * @param void 
+ * @pre 
+ * @return void 
+ * @post 
+ * 
+ */
 void ResetKeys(void);
 #else
 void SetUpKeys();
@@ -87,6 +141,7 @@ void FreeKeyControl();
 void ResetKeys();
 #endif
 
+//"private" portion of the "class"
 extern enum KeysStates KeysState;
 extern Pixmap mouse, leftarrow, rightarrow;
 extern Pixmap mouseM, leftarrowM, rightarrowM;
