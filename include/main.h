@@ -92,14 +92,104 @@
  */
 
 #if NeedFunctionPrototypes
+
+/**
+ * sets the framerate of the program
+ *
+ * @param int delay amount of time between frames
+ * @pre game is launch
+ * @return void 
+ * @post framerate is set to 1/delay
+ * 
+ */
 void SetGameSpeed(int delay);
+
+/**
+ * accessor for the warp speed
+ *
+ * @param void 
+ * @pre 
+ * @return int returns the warp speed
+ * @post 
+ * 
+ */
 int GetWarpSpeed(void);
+
+/**
+ * gets the direction of the paddle
+ *
+ * @param void 
+ * @pre game is in game-mode state
+ * @return int returns direction (right 1, left -1, motionless 0)
+ * @post 
+ * 
+ */
 int paddleIsMoving(void);
+
+/**
+ * sets framerate for the user
+ *
+ * @param int delay time between frame
+ * @pre 
+ * @return void 
+ * @post 
+ * 
+ */
 void SetUserSpeed(int delay);
+
+/**
+ * sets the control mode for the paddle
+ *
+ * @param int type control type of the paddle
+ * @pre 
+ * @return void 
+ * @post sets paddle control mode to the type
+ * 
+ */
 void SetPaddleControlMode(int type);
+
+/**
+ * accessor for the paddle control type
+ *
+ * @param void 
+ * @pre 
+ * @return int returns the control type of the paddle
+ * @post 
+ * 
+ */
 int GetPaddleControlMode(void);
+
+/**
+ * redraws the graphics for different menus and graphics
+ *
+ * @param Display *display thing being redrawn
+ * @pre 
+ * @return void 
+ * @post graphic is redrawn
+ * 
+ */
 void SelectiveRedraw(Display *display);
+
+/**
+ * handles the motion of the paddle depending on control type
+ *
+ * @param Display *display paddle object
+ * @pre game is in game mode
+ * @return void 
+ * @post paddle is moved if left or right is inputted
+ * 
+ */
 void handlePaddleMoving(Display *display);
+
+/**
+ * initializes user tilt value to 0
+ *
+ * @param void 
+ * @pre 
+ * @return void 
+ * @post tilt value is set to 0
+ * 
+ */
 void SetTiltsZero(void);
 #else
 void SetTiltsZero();
