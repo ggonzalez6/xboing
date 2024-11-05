@@ -1,3 +1,4 @@
+
 /*
  * XBoing - An X11 blockout style computer game
  *
@@ -110,6 +111,18 @@ static Pixmap titlePixmap[6], titlePixmapM[6];
 static Pixmap justin, justinM, kibell, kibellM, presents, presentsM;
 static int waitingFrame, waitMode;
 
+
+/**
+ * @brief Initializes all bitmaps for the presentation.
+ * 
+ * This function loads various pixmap data for elements used in the presentation,
+ * like flags, earth, and title bitmaps. It also handles errors if pixmaps
+ * cannot be created.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where bitmaps are displayed.
+ * @param colormap The colormap used for creating pixmaps.
+ */
 void SetUpPresents(Display *display, Window window, Colormap colormap)
 {
 	XpmAttributes   attributes;
@@ -173,6 +186,19 @@ void SetUpPresents(Display *display, Window window, Colormap colormap)
 	ResetPresents();
 }
 
+
+/**
+ * @brief Renders a specific letter as part of the title display.
+ * 
+ * Draws one of six letters that spell out a title on the screen.
+ * Each letter has unique position, dimensions, and pixmap data.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where letters are drawn.
+ * @param letter The index of the letter to draw (0 to 5).
+ * @param x The x-coordinate of the letter position.
+ * @param y The y-coordinate of the letter position.
+ */
 static void DrawLetter(Display *display, Window window, int letter, 
 	int x, int y)
 {
@@ -213,6 +239,16 @@ static void DrawLetter(Display *display, Window window, int letter,
 	}
 }
 
+
+/**
+ * @brief Draws the flag and introductory text in the presentation.
+ * 
+ * Displays a flag bitmap and introductory text in the central window area.
+ * Also displays the Earth image with a copyright message.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the presentation is shown.
+ */
 void DoPresentFlag(Display *display, Window window)
 {
 	char string[80];
@@ -263,6 +299,16 @@ void DoPresentFlag(Display *display, Window window)
 	SetPresentWait(PRESENT_TEXT1, frame + 800);
 }
 
+
+/**
+ * @brief Draws a specified introductory text image in the presentation.
+ * 
+ * Displays one of several introductory text images, each at a specific position
+ * on the screen. Uses a bitmap to represent each text image.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the text is displayed.
+ */
 static void DoText1(Display *display, Window window)
 {
 	int x, y;
@@ -279,6 +325,16 @@ static void DoText1(Display *display, Window window)
 	SetPresentWait(PRESENT_TEXT2, frame + 300);
 }
 
+
+/**
+ * @brief Draws a specified introductory text image in the presentation.
+ * 
+ * Displays one of several introductory text images, each at a specific position
+ * on the screen. Uses a bitmap to represent each text image.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the text is displayed.
+ */
 static void DoText2(Display *display, Window window)
 {
 	int x, y;
@@ -295,6 +351,16 @@ static void DoText2(Display *display, Window window)
 	SetPresentWait(PRESENT_TEXT3, frame + 500);
 }
 
+
+/**
+ * @brief Draws a specified introductory text image in the presentation.
+ * 
+ * Displays one of several introductory text images, each at a specific position
+ * on the screen. Uses a bitmap to represent each text image.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the text is displayed.
+ */
 static void DoText3(Display *display, Window window)
 {
 	int x, y;
@@ -313,6 +379,16 @@ static void DoText3(Display *display, Window window)
 	SetPresentWait(PRESENT_TEXT_CLEAR, frame + 750);
 }
 
+
+/**
+ * @brief Clears the introductory text from the presentation window.
+ * 
+ * Removes any introductory text displayed in the presentation by fading it away.
+ * Prepares the screen for the next display phase.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where text clearing is done.
+ */
 static void DoTextClear(Display *display, Window window)
 {
 	int x, y;
@@ -333,6 +409,16 @@ static int dists[] =
 	71, 73, 83, 41, 85, 88
 };
 
+
+/**
+ * @brief Sequentially draws the letters of the title on the screen.
+ * 
+ * Displays each letter of the title one at a time across the screen.
+ * Each letter plays a sound when displayed.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the letters are drawn.
+ */
 static void DoLetters(Display *display, Window window)
 {
 	static int i = 0;
@@ -365,6 +451,16 @@ static void DoLetters(Display *display, Window window)
 	i++;
 }
 
+
+/**
+ * @brief Creates a sparkle effect in the presentation.
+ * 
+ * Draws a series of images at a specific location on the screen to simulate
+ * a sparkling effect.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the sparkle effect is drawn.
+ */
 static void DoSparkle(Display *display, Window window)
 {
     static Pixmap store;
@@ -406,6 +502,14 @@ static void DoSparkle(Display *display, Window window)
 }
 
 
+/**
+ * @brief Displays a special message in the presentation sequence.
+ * 
+ * Shows one of several special message text strings with typing effect.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the message is displayed.
+ */
 static void DoSpecialText1(Display *display, Window window)
 {
 	static int first = True;
@@ -448,6 +552,14 @@ static void DoSpecialText1(Display *display, Window window)
 }
 
 
+/**
+ * @brief Displays a special message in the presentation sequence.
+ * 
+ * Shows one of several special message text strings with typing effect.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the message is displayed.
+ */
 static void DoSpecialText2(Display *display, Window window)
 {
 	static int first = True;
@@ -484,6 +596,15 @@ static void DoSpecialText2(Display *display, Window window)
 	}
 }
 
+
+/**
+ * @brief Displays a special message in the presentation sequence.
+ * 
+ * Shows one of several special message text strings with typing effect.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the message is displayed.
+ */
 static void DoSpecialText3(Display *display, Window window)
 {
 	static int first = True;
@@ -521,7 +642,15 @@ static void DoSpecialText3(Display *display, Window window)
 }
 
 
-
+/**
+ * @brief Gradually clears the presentation screen.
+ * 
+ * Clears the entire screen gradually by wiping down the screen in rows.
+ * Called at the end of the presentation to reset the display.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window to be cleared.
+ */
 static void DoClear(Display *display, Window window)
 {
 	static int yt, yb, t;
@@ -561,6 +690,16 @@ static void DoClear(Display *display, Window window)
 	}
 }
 
+
+/**
+ * @brief Finishes the presentation early.
+ * 
+ * Sets the state to finish mode to skip the remaining presentation steps.
+ * Triggered when the user presses a specific key.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the presentation is shown.
+ */
 void QuickFinish(Display *display, Window window)
 {
 	DEBUG("finishing in presents mode.")
@@ -569,6 +708,16 @@ void QuickFinish(Display *display, Window window)
 	SetPresentWait(PRESENT_FINISH, frame);
 }
 
+
+/**
+ * @brief Completes and cleans up the presentation.
+ * 
+ * Frees up resources used in the presentation, clears the screen,
+ * and transitions to the game intro mode.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the presentation was shown.
+ */
 static void DoFinish(Display *display, Window window)
 {
 	/* Free all the pixmaps used in this intro */
@@ -587,6 +736,16 @@ static void DoFinish(Display *display, Window window)
 	mode = MODE_INTRO;
 }
 
+
+/**
+ * @brief Manages the presentation sequence based on the current state.
+ * 
+ * Controls the flow of the presentation by selecting the appropriate
+ * function for the current state in the `PresentState` enumeration.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the presentation is shown.
+ */
 void Presents(Display *display, Window window)
 {
 	switch (PresentState)
@@ -652,6 +811,14 @@ void RedrawPresents(Display *display, Window window)
 {
 }
 
+
+/**
+ * @brief Frees specific pixmap resources from the presentation.
+ * 
+ * Releases the large earth pixmap and its mask to free up memory.
+ * 
+ * @param display Pointer to the X11 display connection.
+ */
 void FreeSomePresents(Display *display)
 {
 	/* Free the large earth pixmap and it's mask */
@@ -659,6 +826,14 @@ void FreeSomePresents(Display *display)
 	if (earthPixmapM)	XFreePixmap(display, earthPixmapM);
 }
 
+
+/**
+ * @brief Frees all pixmap resources from the presentation.
+ * 
+ * Releases all pixmaps and their masks used in the presentation.
+ * 
+ * @param display Pointer to the X11 display connection.
+ */
 void FreeAllPresents(Display *display)
 {
 	int i;
@@ -686,6 +861,13 @@ void FreeAllPresents(Display *display)
 	}
 }
 
+
+/**
+ * @brief Resets the presentation to its initial state.
+ * 
+ * Resets the `PresentState` and frame counters to start the presentation
+ * from the beginning.
+ */
 void ResetPresents(void)
 {
 	DEBUG("Reset presents mode.")
@@ -697,6 +879,17 @@ void ResetPresents(void)
 	SetGameSpeed(FAST_SPEED);
 }
 
+
+/**
+ * @brief Sets the waiting mode and frame for the presentation.
+ * 
+ * This function configures the waiting period between frames during the
+ * introduction sequence based on the specified mode and frame.
+ *
+ * @param newMode Integer representing the new wait mode to set.
+ * @param waitFrame Integer specifying the frame at which to stop waiting.
+ */
+
 void SetPresentWait(int newMode, int waitFrame)
 {
 	waitingFrame = waitFrame;
@@ -704,6 +897,14 @@ void SetPresentWait(int newMode, int waitFrame)
 	PresentState = PRESENT_WAIT;
 }
 
+
+/**
+ * @brief Manages the waiting state in the introduction presentation.
+ * 
+ * This function is called while the presentation is in a waiting mode.
+ * It handles tasks during waiting, like transitioning modes after
+ * the specified frame count is reached.
+ */
 void DoPresentWait(void)
 {
 	if (frame == waitingFrame)
