@@ -105,6 +105,16 @@ enum KeysStates waitMode;
 Pixmap mouse, leftarrow, rightarrow;
 Pixmap mouseM, leftarrowM, rightarrowM;
 
+/**
+ * @brief Initializes the keys display and sets up pixmap resources.
+ * 
+ * @param display The display connection to the X server.
+ * @param window The target window where pixmaps will be drawn.
+ * @param colormap The colormap for handling colors in the pixmaps.
+ * 
+ * This function sets up pixmaps for mouse, left arrow, and right arrow graphics.
+ * It calls `HandleXPMError` to handle errors in pixmap creation.
+ */
 void SetUpKeys(Display *display, Window window, Colormap colormap)
 {
     XpmAttributes   attributes;
@@ -131,6 +141,15 @@ void SetUpKeys(Display *display, Window window, Colormap colormap)
 	ResetKeys();
 }
 
+/**
+ * @brief Displays game control instructions on the screen.
+ * 
+ * @param display The display connection to the X server.
+ * @param window The target window for drawing text and shapes.
+ * 
+ * This function draws a series of text instructions on how to control the game.
+ * Consider replacing `strcpy` with `strncpy` for safer handling.
+ */
 static void DoText(Display *display, Window window)
 {
 	char string[80];
@@ -262,6 +281,16 @@ static void DoText(Display *display, Window window)
 		PLAY_HEIGHT - 30, tann, PLAY_WIDTH);
 }
 
+
+/**
+ * @brief Creates a sparkle animation on the screen.
+ * 
+ * @param display The display connection to the X server.
+ * @param window The target window for the animation.
+ * 
+ * This function creates a sparkle effect in a random location within the window.
+ * @deprecated Consider updating this function to support smoother animations.
+ */
 static void DoSparkle(Display *display, Window window)
 {
 	static Pixmap store;
@@ -301,6 +330,13 @@ static void DoSparkle(Display *display, Window window)
 	}
 }
 
+
+/**
+ * @brief Finishes the key control display and resets the edit mode.
+ * 
+ * @param display The display connection to the X server.
+ * @param window The target window for cleanup.
+ */
 static void DoFinish(Display *display, Window window)
 {
 	ResetKeysEdit();
@@ -310,6 +346,12 @@ static void DoFinish(Display *display, Window window)
 }
 
 
+/**
+ * @brief Controls the display and transitions of the key control screen.
+ * 
+ * @param display The display connection to the X server.
+ * @param window The target window for key control rendering.
+ */
 void Keys(Display *display, Window window)
 {
 	switch (KeysState)
@@ -354,12 +396,27 @@ void Keys(Display *display, Window window)
 	}
 }
 
+
+/**
+ * @brief Redraws the key control screen components.
+ * 
+ * @param display The display connection to the X server.
+ * @param window The target window for redrawing.
+ */
 void RedrawKeys(Display *display, Window window)
 {
 	DoIntroTitle(display, window);
 	DoText(display, window);
 }
 
+
+/**
+ * @brief Frees resources associated with key control pixmaps.
+ * 
+ * @param display The display connection to the X server.
+ * 
+ * This function frees all allocated pixmaps for the key control graphics.
+ */
 void FreeKeyControl(Display *display)
 {
     if (mouse)     		XFreePixmap(display, mouse);
@@ -370,6 +427,12 @@ void FreeKeyControl(Display *display)
     if (rightarrowM)   	XFreePixmap(display, rightarrowM);
 }
 
+
+/**
+ * @brief Resets the key control display to its initial state.
+ * 
+ * Initializes the start and end frames and sets the initial `KeysState`.
+ */
 void ResetKeys(void)
 {
 	KeysState = KEYS_TITLE;
@@ -380,6 +443,12 @@ void ResetKeys(void)
 	DEBUG("Reset keys mode.")
 }
 
+
+/**
+ * @brief Waits for a specified frame to proceed to the next key control state.
+ * 
+ * This function is called when `KeysState` is in `KEYS_WAIT`.
+ */
 static void DoKeysWait(void)
 {
 	if (frame == waitingFrame)
