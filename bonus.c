@@ -1,3 +1,13 @@
+/**
+ * @file bonus.c
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief the bonus scoring system for xboing
+ * 
+ * the implementation of the bonus scoring system for xboing to handle different aspects of the bonus mode in the game, including displaying messages, calculating and updating scores, and managing game states.
+ */
+
+
 /*
  * XBoing - An X11 blockout style computer game
  *
@@ -121,6 +131,14 @@ static u_long 	bonusScore;
 static int 		firstTime = True;
 
 
+
+/**
+ * @brief Sets up the bonus display with the given colormap.
+ *
+ * @param display The display to render on.
+ * @param window The window in which to display the bonuses.
+ * @param colormap The color map to use for rendering.
+ */
 void SetUpBonus(Display *display, Window window, Colormap colormap)
 {
 	XpmAttributes   attributes;
@@ -162,6 +180,13 @@ void ResetNumberBonus(void)
 	numBonus = 0;
 }
 
+
+/**
+ * @brief Draws a border of balls on the display.
+ *
+ * @param display The display to render on.
+ * @param window The window in which to draw the borders.
+ */
 void DrawBallBorder(Display *display, Window window)
 {
 	int x, y;
@@ -197,6 +222,15 @@ void DrawBallBorder(Display *display, Window window)
 
 }
 
+
+/**
+ * @brief Draws the small introductory title at the specified position.
+ *
+ * @param display The display to render on.
+ * @param window The window in which to draw the title.
+ * @param x The x-coordinate for the title.
+ * @param y The y-coordinate for the title.
+ */
 void DrawSmallIntroTitle(Display *display, Window window, int x, int y)
 {
 	DEBUG("Drawing small intro title.")
@@ -207,6 +241,13 @@ void DrawSmallIntroTitle(Display *display, Window window, int x, int y)
 		SMALL_TITLE_WIDTH, SMALL_TITLE_HEIGHT, False);
 }
 
+
+/**
+ * @brief Sets up the bonus screen for display.
+ *
+ * @param display The display to render on.
+ * @param window The window to show the bonus screen.
+ */
 void SetupBonusScreen(Display *display, Window window)
 {
 	/* Clear the background again */
@@ -227,6 +268,14 @@ void SetupBonusScreen(Display *display, Window window)
 	XFlush(display);
 }
 
+
+
+/**
+ * @brief Draws the title text and related information on the display.
+ *
+ * @param display The display to render on.
+ * @param window The window to show the title text.
+ */
 void DrawTitleText(Display *display, Window window)
 {
 	SetCurrentMessage(display, messWindow, "- Bonus Tally -", True);
@@ -262,6 +311,14 @@ void DrawTitleText(Display *display, Window window)
 	DEBUG("set bonus mode to BONUS_SCORE.")
 }
 
+
+
+/**
+ * @brief Handles the scoring mechanism after completing a level.
+ *
+ * @param display The display to render on.
+ * @param window The window to show the score.
+ */
 static void DoScore(Display *display, Window window)
 {
 	DEBUG("in function DoScore() in bonus.c")
@@ -280,6 +337,14 @@ static void DoScore(Display *display, Window window)
 	DEBUG("set bonus mode to BONUS_BONUS.")
 }
 
+
+
+/**
+ * @brief Handles the display and calculation of bonuses.
+ *
+ * @param display The display to render on.
+ * @param window The window to show the bonuses.
+ */
 static void DoBonuses(Display *display, Window window)
 {
 	int x, plen, secs;
@@ -392,6 +457,17 @@ static void DoBonuses(Display *display, Window window)
 	}
 }
 
+
+
+/**
+ * @brief Displays the current level during the bonus round.
+ *
+ * This function is called to show the current level in the bonus 
+ * round. It is executed when the current bonus state is BONUS_LEVEL.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to display the level.
+ */
 static void DoLevel(Display *display, Window window)
 {
 	int secs, theLevel;
@@ -434,6 +510,18 @@ static void DoLevel(Display *display, Window window)
 	DEBUG("set bonus mode to BONUS_BULLET.")
 }
 
+
+
+/**
+ * @brief Displays the number of bullets used during the bonus round.
+ *
+ * This function is called to show the bullets collected or used 
+ * during the bonus round. It is invoked when the current bonus state 
+ * is BONUS_BULLET.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to display the bullet information.
+ */
 static void DoBullets(Display *display, Window window)
 {
 	int x, plen;
@@ -495,6 +583,19 @@ static void DoBullets(Display *display, Window window)
 	}
 }
 
+
+
+
+/**
+ * @brief Displays the time bonus awarded during the bonus round.
+ *
+ * This function is called to show the time bonus the player has earned 
+ * during the bonus round. It is executed when the current bonus state 
+ * is BONUS_TIME.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to display the time bonus.
+ */
 static void DoTimeBonus(Display *display, Window window)
 {
 	int secs = 0;
@@ -532,6 +633,18 @@ static void DoTimeBonus(Display *display, Window window)
 	SetBonusWait(BONUS_HSCORE, frame + LINE_DELAY);
 }
 
+
+
+/**
+ * @brief Displays the high score during the bonus round.
+ *
+ * This function is called to show the high score achieved by the player 
+ * during the bonus round. It is executed when the current bonus state 
+ * is BONUS_HSCORE.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to display the high score.
+ */
 static void DoHighScore(Display *display, Window window)
 {
 	int myrank = 0;
@@ -580,6 +693,18 @@ static void DoHighScore(Display *display, Window window)
 	SetBonusWait(BONUS_END_TEXT, frame + LINE_DELAY);
 }
 
+
+
+/**
+ * @brief Displays the end text for the bonus screen.
+ *
+ * This function is called to render the ending text for the bonus 
+ * screen. It is executed when the current bonus state is 
+ * BONUS_END_TEXT.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to draw the end text.
+ */
 static void DoEndText(Display *display, Window window)
 {
 	DEBUG("DoEndText in bonus screen.")
@@ -597,6 +722,18 @@ static void DoEndText(Display *display, Window window)
 	SetBonusWait(BONUS_FINISH, frame + LINE_DELAY * 2);
 }
 
+
+
+/**
+ * @brief Finishes the bonus round and transitions to the next stage.
+ *
+ * This function is called to conclude the bonus round and move the 
+ * game to the next phase. It is executed when the current bonus 
+ * state is BONUS_FINISH.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to finalize the bonus round.
+ */
 static void DoFinish(Display *display, Window window)
 {
 	DEBUG("DoFinish in bonus screen.")
@@ -618,6 +755,9 @@ static void DoFinish(Display *display, Window window)
 		SelectiveRedraw(display);
 }
 
+
+
+
 void SetBonusWait(enum BonusStates newMode, int waitFrame)
 {
 	waitingFrame = waitFrame;
@@ -625,6 +765,13 @@ void SetBonusWait(enum BonusStates newMode, int waitFrame)
 	BonusState = BONUS_WAIT;
 }
 
+
+/**
+ * @brief Waits during the bonus round before proceeding.
+ *
+ * This function introduces a wait period during the bonus round. It 
+ * is called when the current bonus state is BONUS_WAIT.
+ */
 void DoBonusWait(void)
 {
 	/* Wait for the frame we want to come along - then change modes */
@@ -632,6 +779,19 @@ void DoBonusWait(void)
 		BonusState = waitMode;
 }
 
+
+
+/**
+ * @brief Executes the appropriate action based on the current bonus state.
+ *
+ * This function manages the rendering of different bonus-related screens, 
+ * such as displaying title text, scores, bonuses, levels, bullets, 
+ * time bonuses, high scores, end text, and finishing actions. 
+ * It uses a switch statement to handle the current state.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to draw the bonus information.
+ */
 void DoBonus(Display *display, Window window)
 {
 	/* The states within the bonus mode */
@@ -691,6 +851,17 @@ void DoBonus(Display *display, Window window)
 	}
 }
 
+
+
+/**
+ * @brief Redraws the entire bonus screen.
+ *
+ * This function is intended to refresh the display of the bonus screen. 
+ * The original functionality for preventing cheating has been removed.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ * @param window The window in which to redraw the bonus information.
+ */
 void RedrawBonus(Display *display, Window window)
 {
 	/* This will redraw the entire screen */
@@ -698,12 +869,23 @@ void RedrawBonus(Display *display, Window window)
 	/* Took this out as some people were cheating!!! */
 }
 
+
+
+/**
+ * @brief Frees memory associated with the bonus system.
+ *
+ * This function releases any allocated pixmaps used for rendering the 
+ * bonus screens to prevent memory leaks.
+ *
+ * @param display A pointer to the Display structure for the X server.
+ */
 void FreeBonus(Display *display)
 {
 	/* Free all the hungry memory leaks */
 	if (titlePixmap)	XFreePixmap(display, titlePixmap);
 	if (titlePixmapM)	XFreePixmap(display, titlePixmapM);
 }
+
 
 void ComputeAndAddBonusScore(void)
 {
@@ -754,6 +936,15 @@ void ComputeAndAddBonusScore(void)
 	DEBUG("finished computing and adding bonus score.")
 }
 
+
+
+/**
+ * @brief Resets the bonus screen to its initial state.
+ *
+ * This function prepares the bonus screen for a new session by 
+ * resetting the bonus state and score values, and computing the 
+ * initial bonus score.
+ */
 void ResetBonus(void)
 {
 	DEBUG("Reseting bonus screen.")
