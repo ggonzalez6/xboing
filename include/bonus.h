@@ -1,3 +1,13 @@
+/**
+ * @file bonus.h
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief header file for bonus.c
+ * 
+ * header file for bonus.c that implements a bonus stage in xboing.
+ */
+
+
 #ifndef _BONUS_H_
 #define _BONUS_H_
 
