@@ -1,3 +1,13 @@
+/**
+ * @file demo.h
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief header file for a demo 
+ * 
+ * header file for demo.c that demostrats a demo of xboing
+ */
+
+
 #ifndef _DEMO_H_
 #define _DEMO_H_
 
