@@ -1,3 +1,12 @@
+/**
+ * @file presents.c
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief for window and image handling.
+ * 
+ * handles the display of an introductory or presentation screen for xboing. It manages the loading, rendering, and animation of several graphical elements, such as text, bitmaps, and special effects.
+ */
+
 
 /*
  * XBoing - An X11 blockout style computer game
