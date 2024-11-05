@@ -1,3 +1,13 @@
+/**
+ * @file keys.h
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief header file for keys.c
+ * 
+ * header file that houses the class for keys.c
+ */
+
+
 #ifndef _KEYS_H_
 #define _KEYS_H_
 
