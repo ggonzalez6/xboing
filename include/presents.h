@@ -1,3 +1,13 @@
+/**
+ * @file presents.h
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief header file for presents.c
+ * 
+ * the header file that houses the class for the presents.c file
+ */
+
+
 #ifndef _PRESENT_H_
 #define _PRESENT_H_
 
