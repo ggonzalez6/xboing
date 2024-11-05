@@ -1,3 +1,13 @@
+/**
+ * @file demo.c
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief controls a game demo
+ * 
+ * The demo.c file controls a game demo, showing various visuals like titles, blocks, paddles, and animations to guide the user through different stages.
+ */
+
+
 /*
  * XBoing - An X11 blockout style computer game
  *
@@ -104,11 +114,34 @@ enum DemoStates DemoState;
 static int waitingFrame;
 enum DemoStates waitMode;
 
+
+
+/**
+ * @brief Initializes the demonstration sequence.
+ * 
+ * Prepares the demonstration by resetting its initial settings, including 
+ * resetting the demo state.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the demonstration will be shown.
+ * @param colormap The colormap used for creating bitmaps in the demo.
+ */
 void SetUpDemonstration(Display *display, Window window, Colormap colormap)
 {
 	ResetDemonstration();
 }
 
+
+
+/**
+ * @brief Displays the title screen in the demonstration.
+ * 
+ * Draws the title screen for the demonstration by rendering the background 
+ * pattern and title bitmap.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the title is drawn.
+ */
 void DoDemoTitle(Display *display, Window window)
 {
 	/* Clear and draw background pattern */
@@ -118,6 +151,17 @@ void DoDemoTitle(Display *display, Window window)
 	DrawIntroTitle(display, window, 10, 10);
 }
 
+
+
+/**
+ * @brief Draws demo level elements and animations in the demonstration.
+ * 
+ * Displays demo elements such as blocks, the ball, and text instructions
+ * to simulate gameplay interactions.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where elements are drawn.
+ */
 static void DoBlocks(Display *display, Window window)
 {
 	int y = 120;
@@ -180,6 +224,17 @@ static void DoBlocks(Display *display, Window window)
 		"Paddle moves left to intercept ball.", 160, PLAY_HEIGHT - 60, yellow);
 }
 
+
+
+/**
+ * @brief Creates a sparkle effect during the demonstration.
+ * 
+ * Renders a sparkle effect in the window by animating a small sequence of 
+ * star images at random positions. The sparkle effect is repeated at intervals.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the sparkle effect is rendered.
+ */
 static void DoSparkle(Display *display, Window window)
 {
     static Pixmap store;
@@ -219,6 +274,17 @@ static void DoSparkle(Display *display, Window window)
     }
 }
 
+
+
+/**
+ * @brief Displays a prompt message in the demonstration.
+ * 
+ * Shows a prompt message, such as "Insert coin to start the game,"
+ * at a specific position on the screen.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the prompt text is displayed.
+ */
 static void DoText(Display *display, Window window)
 {
 	char string[80];
@@ -235,6 +301,17 @@ static void DoText(Display *display, Window window)
 	DemoState = DEMO_SPARKLE;
 }
 
+
+
+/**
+ * @brief Completes the demonstration sequence.
+ * 
+ * Finishes the demonstration by resetting keyboard controls and
+ * transitioning to the main game or menu.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window used in the demonstration.
+ */
 static void DoFinish(Display *display, Window window)
 {
     ResetKeys();
@@ -244,6 +321,18 @@ static void DoFinish(Display *display, Window window)
 		playSoundFile("whizzo", 50);
 }
 
+
+
+/**
+ * @brief Manages the flow of the demonstration sequence.
+ * 
+ * Based on the current `DemoState`, selects and executes the corresponding
+ * function in the demonstration sequence, such as displaying the title,
+ * demo blocks, text, or sparkle effects.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the demonstration is shown.
+ */
 void Demonstration(Display *display, Window window)
 {
 	switch (DemoState)
@@ -294,6 +383,17 @@ void Demonstration(Display *display, Window window)
 	}
 }
 
+
+
+/**
+ * @brief Redraws the demonstration display.
+ * 
+ * Refreshes the display by redrawing key elements of the demonstration,
+ * including the title, blocks, and text, typically used during window exposure.
+ * 
+ * @param display Pointer to the X11 display connection.
+ * @param window The X11 window where the demonstration is shown.
+ */
 void RedrawDemonstration(Display *display, Window window)
 {
 	DoDemoTitle(display, window);
@@ -301,10 +401,28 @@ void RedrawDemonstration(Display *display, Window window)
 	DoText(display, window);
 }
 
+
+
+/**
+ * @brief Frees resources allocated for the demonstration.
+ * 
+ * Releases resources associated with the demonstration, allowing the system
+ * to reclaim memory used for demonstration assets.
+ * 
+ * @param display Pointer to the X11 display connection.
+ */
 void FreeDemonstration(Display *display)
 {
 }
 
+
+
+/**
+ * @brief Resets the demonstration to its starting state.
+ * 
+ * Sets the `DemoState` and frame counters back to the initial values,
+ * restarting the demonstration from the title screen.
+ */
 void ResetDemonstration(void)
 {
 	DemoState = DEMO_TITLE;
@@ -314,6 +432,17 @@ void ResetDemonstration(void)
 	DEBUG("Reset Demonstration mode.")
 }
 
+
+
+/**
+ * @brief Sets a waiting mode and frame for the demonstration sequence.
+ * 
+ * This function configures the waiting period for the demonstration by specifying
+ * the mode and frame to resume normal operation.
+ *
+ * @param newMode The mode to switch to after waiting.
+ * @param waitFrame The frame number at which to end the wait period.
+ */
 void SetDemoWait(enum DemoStates newMode, int waitFrame)
 {
 	waitingFrame = waitFrame;
@@ -321,6 +450,14 @@ void SetDemoWait(enum DemoStates newMode, int waitFrame)
 	DemoState = DEMO_WAIT;
 }
 
+
+
+/**
+ * @brief Handles the waiting state in the demonstration sequence.
+ * 
+ * Checks if the current frame matches the designated `waitFrame`, and if so,
+ * transitions to the mode specified in `waitMode`.
+ */
 void DoDemoWait(void)
 {
 	if (frame == waitingFrame)
