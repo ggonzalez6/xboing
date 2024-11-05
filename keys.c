@@ -1,3 +1,13 @@
+/**
+ * @file keys.c
+ * @author Gerardo Gonzalez
+ * @date 2024-11-05
+ * @brief manages the key control and setup screens for xboing
+ * 
+ * this file is responsible for handling the game's key control display, rendering game instructions, and managing related animations and graphics.
+ */
+
+
 /*
  * XBoing - An X11 blockout style computer game
  *
