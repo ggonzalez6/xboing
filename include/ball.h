@@ -1,3 +1,13 @@
+/**
+ * @file ball.h
+ * @author Gerardo Gonzalez
+ * @date 2024-11-06
+ * @brief the header file for ball.c
+ * 
+ * the header file for ball.c that manages animatios and rendering functions for the in-game ball
+ */
+
+
 #ifndef _BALL_H_
 #define _BALL_H_
 
