@@ -1,3 +1,13 @@
+/**
+ * @file ball.c
+ * @author Gerardo Gonzalez
+ * @date 2024-11-06
+ * @brief manages animations and rendering functions for ball objects
+ * 
+ * The ball.c file manages animations and rendering functions for ball objects in an X11 display, including loading, drawing, moving, and freeing animation frames for balls, guides, and ball birth effects.
+ */
+
+
 /*
  * XBoing - An X11 blockout style computer game
  *
@@ -173,6 +183,14 @@ static int guidePos = 6;	 /* Start in middle of guider */
 /* global constant machine epsilon */
 float MACHINE_EPS;
 
+
+/**
+ * @brief Initialize the ball and its animation frames.
+ * 
+ * @param display The display to render the ball on.
+ * @param window The window where the ball is drawn.
+ * @param colormap The color map for the display.
+ */
 void InitialiseBall(Display *display, Window window, Colormap colormap)
 {
 	/*
@@ -296,6 +314,16 @@ void InitialiseBall(Display *display, Window window, Colormap colormap)
 	ClearAllBalls();
 }
 
+
+
+/**
+ * @brief Frees all animation frames related to balls, guides, and ball birth animations.
+ *
+ * This function releases the memory associated with the pixmaps used for the ball
+ * animations, guide markers, and ball birth animations by freeing each one.
+ *
+ * @param display The display connection for the current X11 session.
+ */
 void FreeBall(Display *display)
 {
 	/*
@@ -327,11 +355,32 @@ void FreeBall(Display *display)
 	}
 }
 
+
+/**
+ * @brief Redraws the ball on the display.
+ *
+ * @note This function is yet to be implemented.
+ *
+ * @param display The display connection for the current X11 session.
+ * @param window The window in which to redraw the ball.
+ */
 void RedrawBall(Display *display, Window window)
 {
 	/* not hard - STILL TO BE IMPLEMENTED */
 }
 
+
+
+/**
+ * @brief Erases the ball from the display at a given position.
+ *
+ * Clears the area occupied by the ball based on its center coordinates.
+ *
+ * @param display The display connection for the current X11 session.
+ * @param window The window in which to clear the ball.
+ * @param x X-coordinate for the center of the ball.
+ * @param y Y-coordinate for the center of the ball.
+ */
 static void EraseTheBall(Display *display, Window window, int x, int y)
 {
 	/* 
@@ -342,6 +391,20 @@ static void EraseTheBall(Display *display, Window window, int x, int y)
 		BALL_WIDTH, BALL_HEIGHT, False);
 }
 
+
+
+/**
+ * @brief Draws the ball at a specified location and animation slide frame.
+ *
+ * Uses the slide index to determine which frame of the animation to render.
+ * The x and y coordinates represent the ball's center.
+ *
+ * @param display The display connection for the current X11 session.
+ * @param window The window in which to draw the ball.
+ * @param x X-coordinate for the center of the ball.
+ * @param y Y-coordinate for the center of the ball.
+ * @param slide The animation frame index for the ball.
+ */
 void DrawTheBall(Display *display, Window window, int x, int y, int slide)
 {
 	/* 
@@ -353,6 +416,20 @@ void DrawTheBall(Display *display, Window window, int x, int y, int slide)
 		x - BALL_WC, y - BALL_HC, BALL_WIDTH, BALL_HEIGHT, False);
 }
 
+
+
+/**
+ * @brief Draws the ball birth animation at a specified location and frame.
+ *
+ * Uses the slide index to determine which frame of the birth animation to render.
+ * The x and y coordinates represent the center of the ball birth animation.
+ *
+ * @param display The display connection for the current X11 session.
+ * @param window The window in which to draw the ball birth animation.
+ * @param x X-coordinate for the center of the ball birth animation.
+ * @param y Y-coordinate for the center of the ball birth animation.
+ * @param slide The animation frame index for the ball birth.
+ */
 void DrawTheBallBirth(Display *display, Window window, int x, int y, int slide)
 {
 	/* 
@@ -364,6 +441,23 @@ void DrawTheBallBirth(Display *display, Window window, int x, int y, int slide)
 		x - BALL_WC, y - BALL_HC, BALL_WIDTH, BALL_HEIGHT, False);
 }
 
+
+
+/**
+ * @brief Moves the ball birth animation to a new position with optional erasure.
+ *
+ * Clears any existing ball area if `replace` is set, updates the ball's position,
+ * and draws the birth animation at the specified slide frame.
+ * If slide is -1, the ball area is simply cleared.
+ *
+ * @param display The display connection for the current X11 session.
+ * @param window The window in which to move the ball birth animation.
+ * @param x X-coordinate for the center of the ball.
+ * @param y Y-coordinate for the center of the ball.
+ * @param slide The animation frame index for the ball birth (-1 clears the area).
+ * @param replace Set to True to clear any debris under the ball.
+ * @param i Index of the ball being moved.
+ */
 static void MoveBallBirth(Display *display, Window window, int x, int y, 
 	int slide, int replace, int i)
 {
@@ -389,6 +483,21 @@ static void MoveBallBirth(Display *display, Window window, int x, int y,
         DrawTheBallBirth(display, window, x, y, slide);
 }
 
+
+
+/**
+ * @brief Moves the ball from one position to the next and updates its old position.
+ * 
+ * The ball animation will be rendered based on the current frame. If the ball is 
+ * a killer ball, it will be rendered in red, otherwise it uses its regular animation.
+ * 
+ * @param display The display to use for rendering.
+ * @param window The window where the ball is drawn.
+ * @param x The x-coordinate of the ball's new position.
+ * @param y The y-coordinate of the ball's new position.
+ * @param replace If true, the old position of the ball will be cleared before drawing the new one.
+ * @param i The index of the ball being moved.
+ */
 static void MoveBall(Display *display, Window window, int x, int y, int replace,
 	int i)
 {
@@ -424,6 +533,20 @@ static void MoveBall(Display *display, Window window, int x, int y, int replace,
 	if (balls[i].slide == BALL_SLIDES-1) balls[i].slide = 0;
 }
 
+
+
+
+/**
+ * @brief Moves and animates the guide above a ball when it's waiting to be launched.
+ * 
+ * The guide indicates which direction the ball will travel. This function handles the 
+ * animation and clearing of the guide.
+ * 
+ * @param display The display to use for rendering.
+ * @param window The window where the guide is drawn.
+ * @param i The index of the ball associated with the guide.
+ * @param remove If true, the guide will be removed.
+ */
 static void MoveGuides(Display *display, Window window, int i, int remove)
 {
 	/*
@@ -466,6 +589,16 @@ static void MoveGuides(Display *display, Window window, int i, int remove)
 		guidePos = 6;
 }
 
+
+
+/**
+ * @brief Randomizes the velocity of a ball within a specified range.
+ * 
+ * The velocity of the ball will be randomized in both the x and y directions 
+ * between a minimum value and a maximum value. Negative velocities are also possible.
+ * 
+ * @param i The index of the ball whose velocity is being randomized.
+ */
 void RandomiseBallVelocity(int i)
 {
 	balls[i].dx = balls[i].dy = 0;
@@ -487,6 +620,17 @@ void RandomiseBallVelocity(int i)
 	}
 }
 
+
+
+/**
+ * @brief Tilts the board to prevent a ball from getting stuck in an endless loop.
+ * 
+ * If a ball's state is active, this function will randomize its velocity, which may help 
+ * the ball escape a loop.
+ * 
+ * @param display The display to use for rendering.
+ * @param i The index of the ball that triggered the tilt.
+ */
 void DoBoardTilt(Display *display, int i)
 {
 	/*
@@ -507,6 +651,20 @@ void DoBoardTilt(Display *display, int i)
 	}
 }
 
+
+
+/**
+ * @brief Teleports the specified ball to a random unoccupied location.
+ * 
+ * This function finds a random block position that is not occupied or 
+ * exploding, and teleports the ball there. It tries up to 20 times to find 
+ * a suitable location. If it cannot find one, it erases the ball and starts 
+ * it from the paddle.
+ * 
+ * @param display The X11 display connection.
+ * @param window The window in which to render the ball.
+ * @param i The index of the ball to be teleported.
+ */
 static void TeleportBall(Display *display, Window window, int i)
 {
 	/* 
@@ -620,6 +778,18 @@ static void TeleportBall(Display *display, Window window, int i)
 	DEBUG("Ball was NOT Teleported.");
 }
 
+
+
+/**
+ * @brief Splits the ball into two when a multiball block is hit.
+ * 
+ * This function creates a new ball and teleports it to a random location. 
+ * It also randomizes the new ball's velocity and updates the current 
+ * message displayed.
+ * 
+ * @param display The X11 display connection.
+ * @param window The window in which to render the new ball.
+ */
 void SplitBallInTwo(Display *display, Window window)
 {
 	/*
@@ -644,6 +814,18 @@ void SplitBallInTwo(Display *display, Window window)
 			"Cannot add ball!", True);
 }
 
+
+
+/**
+ * @brief Terminates and clears the specified ball.
+ * 
+ * This function erases the ball's current position and updates its status 
+ * to indicate that it is no longer active.
+ * 
+ * @param display The X11 display connection.
+ * @param window The window in which the ball was rendered.
+ * @param i The index of the ball to be cleared.
+ */
 void ClearBallNow(Display *display, Window window, int i)
 {
 	/*
@@ -657,6 +839,17 @@ void ClearBallNow(Display *display, Window window, int i)
 	DEBUG("Clear ball now called.");
 }
 
+
+/**
+ * @brief Sets the ball's state to 'pop' to indicate it should die.
+ * 
+ * This function changes the ball's mode to indicate that it should be 
+ * removed from the game, simulating a popping effect.
+ * 
+ * @param display The X11 display connection.
+ * @param window The window in which the ball is rendered.
+ * @param i The index of the ball to be marked for popping.
+ */
 void KillBallNow(Display *display, Window window, int i)
 {
 	/*
@@ -668,6 +861,18 @@ void KillBallNow(Display *display, Window window, int i)
 	DEBUG("Ball mode now BALL_POP.");
 }
 
+
+
+/**
+ * @brief Gets the current position of the specified ball.
+ * 
+ * This function retrieves the X and Y coordinates of the ball at the 
+ * specified index and stores them in the provided pointers.
+ * 
+ * @param ballX Pointer to an integer to store the ball's X position.
+ * @param ballY Pointer to an integer to store the ball's Y position.
+ * @param i The index of the ball whose position is to be retrieved.
+ */
 void GetBallPosition(int *ballX, int *ballY, int i)
 {
 	/*
@@ -678,6 +883,23 @@ void GetBallPosition(int *ballX, int *ballY, int i)
 	*ballY = balls[i].bally;
 }
 
+
+
+/**
+ * @brief Handles the interaction between the ball and the paddle.
+ * 
+ * This function checks if the ball has hit the paddle and calculates 
+ * the new position for the ball based on the angle of incidence. It also 
+ * updates the position of the ball if a hit is detected.
+ * 
+ * @param display The X11 display connection.
+ * @param window The window in which the ball is rendered.
+ * @param hit Pointer to an integer to store whether a hit occurred.
+ * @param i The index of the ball being checked.
+ * @param x Pointer to an integer to store the ball's X position after hitting the paddle.
+ * @param y Pointer to an integer to store the ball's Y position after hitting the paddle.
+ * @return Returns TRUE if the ball hit the paddle, FALSE otherwise.
+ */
 static int BallHitPaddle(Display *display, Window window, int *hit, int i,
 	int *x, int *y)
 {
@@ -770,6 +992,22 @@ static int BallHitPaddle(Display *display, Window window, int *hit, int i,
    	return False;
 }
 
+
+
+/**
+ * @brief Handles the collision of a ball with a block.
+ * 
+ * This function determines the action to take when a ball collides with a 
+ * block, depending on the type of block. It updates the block's state and 
+ * manages the ball's interaction with it.
+ * 
+ * @param display The X11 display connection.
+ * @param window The window in which the ball and blocks are rendered.
+ * @param row The row index of the block that was hit.
+ * @param col The column index of the block that was hit.
+ * @param i The index of the ball that hit the block.
+ * @return Returns TRUE if the ball is not to bounce off the block, FALSE otherwise.
+ */
 static int HandleTheBlocks(Display *display, Window window, int row, int col,
 	int i)
 {
@@ -1002,6 +1240,20 @@ static int HandleTheBlocks(Display *display, Window window, int row, int col,
 	return False;
 }
 
+
+
+/**
+ * @brief Updates the ball's position and handles collisions with walls, blocks, and the paddle.
+ * 
+ * This function calculates the ball's new position, checks for collisions with the walls, 
+ * and handles collisions with the paddle or blocks. It also handles the special cases of 
+ * no-wall mode and sticky paddle mode. Additionally, it updates the ball's velocity based 
+ * on interactions and repositions the ball if necessary.
+ * 
+ * @param display The X11 display where the ball is rendered.
+ * @param window The X11 window where the ball is rendered.
+ * @param i The index of the ball being updated.
+ */
 static void UpdateABall(Display *display, Window window, int i)
 {
 	/*
@@ -1323,6 +1575,26 @@ static void UpdateABall(Display *display, Window window, int i)
 	}
 }
 
+
+
+
+/**
+ * @brief Checks if the ball has collided with any regions of a block.
+ * 
+ * This function checks the ball's position relative to the regions of the block 
+ * at the specified row and column. It determines which side of the block the ball 
+ * has hit, if any.
+ * 
+ * @param display The X11 display where the ball and blocks are rendered.
+ * @param window The X11 window where the ball and blocks are rendered.
+ * @param row The row index of the block.
+ * @param col The column index of the block.
+ * @param x The ball's x-coordinate.
+ * @param y The ball's y-coordinate.
+ * @param i The index of the ball.
+ * 
+ * @return The region hit (e.g., REGION_LEFT, REGION_RIGHT, REGION_TOP, etc.), or REGION_NONE if no collision.
+ */
 static int CheckRegions(Display *display, Window window, int row, int col,
 	int x, int y, int i)
 {
@@ -1431,6 +1703,24 @@ static int CheckRegions(Display *display, Window window, int row, int col,
 	return region;
 }
 
+
+
+/**
+ * @brief Checks for a collision between the ball and adjacent blocks.
+ * 
+ * This function checks the ball's position relative to each of the surrounding blocks 
+ * and determines which region (if any) the ball has collided with.
+ * 
+ * @param display The X11 display where the ball and blocks are rendered.
+ * @param window The X11 window where the ball and blocks are rendered.
+ * @param x The ball's x-coordinate.
+ * @param y The ball's y-coordinate.
+ * @param r The row index of the block that was hit.
+ * @param c The column index of the block that was hit.
+ * @param i The index of the ball.
+ * 
+ * @return The region hit (e.g., REGION_LEFT, REGION_RIGHT, REGION_TOP, etc.), or REGION_NONE if no collision.
+ */
 static int CheckForCollision(Display *display, Window window, int x, int y, 
 	int *r, int *c, int i)
 {
@@ -1475,6 +1765,21 @@ static int CheckForCollision(Display *display, Window window, int x, int y,
 	return ret;
 }
 
+
+
+/**
+ * @brief Calculates when two balls will collide.
+ * 
+ * This function calculates the time at which two balls will collide based on their 
+ * current positions and velocities. If the balls are on a collision course, the 
+ * time of collision is returned.
+ * 
+ * @param ball1 The first ball involved in the collision.
+ * @param ball2 The second ball involved in the collision.
+ * @param time The time at which the collision will occur, if applicable.
+ * 
+ * @return True if the balls will collide, False otherwise.
+ */
 static int WhenBallsCollide(BALL *ball1, BALL *ball2, float *time)
 {
     /*
@@ -1538,6 +1843,18 @@ static int WhenBallsCollide(BALL *ball1, BALL *ball2, float *time)
    	return False;
 }
 
+
+
+/**
+ * @brief Handles the collision between two balls.
+ * 
+ * This function calculates the new velocities for two balls after they collide. 
+ * The direction of the balls is updated based on the collision, and their velocities 
+ * are adjusted accordingly.
+ * 
+ * @param ball1 The first ball involved in the collision.
+ * @param ball2 The second ball involved in the collision.
+ */
 static void Ball2BallCollision(BALL *ball1, BALL *ball2)
 {
     /*
@@ -1575,6 +1892,13 @@ static void Ball2BallCollision(BALL *ball1, BALL *ball2)
    ball2->dy += (int) (k * p.y);
 }
 
+
+
+/**
+ * @brief Updates the position variables for a ball that is on the paddle waiting to be shot off.
+ * 
+ * @param i Index of the ball to update.
+ */
 static void updateBallVariables(int i)
 {
 	/*
@@ -1588,6 +1912,13 @@ static void updateBallVariables(int i)
 	balls[i].oldy 	= balls[i].bally;
 }
 
+
+
+/**
+ * @brief Returns the number of active balls currently in the arena.
+ * 
+ * @return Number of active balls.
+ */
 int GetNumberOfActiveBalls(void)
 {
 	/*
@@ -1609,6 +1940,13 @@ int GetNumberOfActiveBalls(void)
 	return t;
 }
 
+
+
+/**
+ * @brief Retrieves an index of an active ball in the arena.
+ * 
+ * @return Index of an active ball or -1 if none are active.
+ */
 int GetAnActiveBall(void)
 {
 	/*
@@ -1626,6 +1964,9 @@ int GetAnActiveBall(void)
 
 	return -1;
 }
+
+
+
 
 int IsBallWaiting(void)
 {
@@ -1687,6 +2028,15 @@ static void ChangeBallDirectionToGuide(int i)
 	DEBUG("Changed ball start direction to guide.");
 }
 
+
+
+/**
+ * @brief Activates a waiting ball and erases the guide marker.
+ * 
+ * @param display Display pointer for drawing operations.
+ * @param window Window in which to activate the ball.
+ * @return True if a ball was activated; otherwise False.
+ */
 int ActivateWaitingBall(Display *display, Window window)
 {
 	/* 
@@ -1715,6 +2065,14 @@ int ActivateWaitingBall(Display *display, Window window)
 	return False;
 }
 
+
+
+/**
+ * @brief Resets the ball start position and prepares it for activation.
+ * 
+ * @param display Display pointer for drawing operations.
+ * @param window Window in which to reset the ball.
+ */
 void ResetBallStart(Display *display, Window window)
 {
 	/*
@@ -1741,6 +2099,15 @@ void ResetBallStart(Display *display, Window window)
 	}
 }
 
+
+
+/**
+ * @brief Animates a ball popping and then removes it from the game.
+ * 
+ * @param display Display pointer for drawing operations.
+ * @param window Window in which to animate the ball pop.
+ * @param i Index of the ball to pop.
+ */
 static void AnimateBallPop(Display *display, Window window, int i)
 {
 	/*
@@ -1785,6 +2152,15 @@ static void AnimateBallPop(Display *display, Window window, int i)
 	}
 }
 
+
+
+/**
+ * @brief Animates the creation of a ball and prepares it on the paddle.
+ * 
+ * @param display Display pointer for drawing operations.
+ * @param window Window in which to animate the ball creation.
+ * @param i Index of the ball to create.
+ */
 static void AnimateBallCreate(Display *display, Window window, int i)
 {
 	/*
@@ -1836,6 +2212,14 @@ static void AnimateBallCreate(Display *display, Window window, int i)
 	}
 }
 
+
+
+/**
+ * @brief Sets the mode of a ball.
+ * 
+ * @param newMode The new state for the ball.
+ * @param i Index of the ball to change mode.
+ */
 void ChangeBallMode(enum BallStates newMode, int i)
 {
 	/*
@@ -1846,6 +2230,15 @@ void ChangeBallMode(enum BallStates newMode, int i)
 	balls[i].ballState = newMode;
 }
 
+
+
+/**
+ * @brief Sets a ball into a wait mode for a specified frame.
+ * 
+ * @param newMode The new mode to set after waiting.
+ * @param waitFrame The frame to change the ball's state.
+ * @param i Index of the ball to wait.
+ */
 static void SetBallWait(enum BallStates newMode, int waitFrame, int i)
 {
 	/*
@@ -1858,6 +2251,13 @@ static void SetBallWait(enum BallStates newMode, int waitFrame, int i)
 	balls[i].ballState 		= BALL_WAIT;
 }
 
+
+
+/**
+ * @brief Waits for a specified frame before activating a new state.
+ * 
+ * @param i Index of the ball to wait.
+ */
 static void DoBallWait(int i)
 {
 	/*
@@ -1872,6 +2272,18 @@ static void DoBallWait(int i)
 	}
 }
 
+
+
+/**
+ * @brief Adds a new ball to the game, if space is available.
+ * 
+ * @param display Display pointer for drawing operations.
+ * @param x Initial x-coordinate of the new ball.
+ * @param y Initial y-coordinate of the new ball.
+ * @param dx Initial x-velocity of the new ball.
+ * @param dy Initial y-velocity of the new ball.
+ * @return Index of the new ball in the array, or -1 if no space is available.
+ */
 int AddANewBall(Display *display, int x, int y, int dx, int dy)
 {
 	/*
@@ -1917,6 +2329,9 @@ int AddANewBall(Display *display, int x, int y, int dx, int dy)
 
 	return -1;
 }
+
+
+
 
 void ClearBall(int i)
 {
