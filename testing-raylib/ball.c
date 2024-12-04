@@ -46,11 +46,12 @@
 /*
  *  Include file dependencies:
  */
-
+#include "ball.h"
+#include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <values.h>
+//#include <values.h>
 
 /*
 // TODO: Remove instances of X11-associated data types
@@ -86,7 +87,8 @@
 #include "bitmaps/balls/bbirth8.png"
 */
 
-
+//sounds definitly not making it
+/*
 #include "include/audio.h"
 #include "include/error.h"
 #include "include/score.h"
@@ -103,6 +105,7 @@
 #include "include/special.h"
 #include "include/ball.h"
 #include "include/faketypes.h"
+*/
 
 /*
  *  Internal macro definitions:
@@ -138,6 +141,7 @@
  *  Internal type declarations:
  */
 
+/*
 static void MoveBall(Display *display, Window window, int x, int y, int replace,
 	int i);
 static void MoveBallBirth(Display *display, Window window, int x, int y, 
@@ -162,11 +166,11 @@ typedef struct
 {
    float x, y;
 } vector_t;
-
+*/
 /*
  *  Internal variable declarations:
  */
-
+/*
 static Pixmap ballsPixmap[BALL_SLIDES];
 static Pixmap ballsMask[BALL_SLIDES];
 static Pixmap ballBirthPixmap[BIRTH_SLIDES];
@@ -174,24 +178,24 @@ static Pixmap ballBirthMask[BIRTH_SLIDES];
 static Pixmap guides[11];
 static Pixmap guidesM[11];
 BALL balls[MAX_BALLS];
-static int guidePos = 6;	 /* Start in middle of guider */
+static int guidePos = 6;*/	 /* Start in middle of guider */
 
 /* global constant machine epsilon */
 float MACHINE_EPS;
-
-void InitialiseBall(Ball balls[], char *texturePath, Vector2 startPos, int radius)
+Ball balls[MAX_BALLS];
+void InitialiseBall(Ball balls[], int i, char *texturePath, Vector2 startPos, float radius)
 {
 
-  ball->texture = LoadTexture(texturePath); 
-  ball->position = startPos;
-  ball->velocity = (Vector2){0,0};
-  ball->radius = BALL_WIDTH
-  ball->color = WHITE;
+  balls[i].texture = LoadTexture(texturePath); 
+  balls[i].position = (Vector2){WINDOW_WIDTH/2, WINDOW_HEIGHT/2};
+  balls[i].velocity = (Vector2){balls[i].velocity.x, balls[i].velocity.y};
+  balls[i].radius = BALL_WIDTH;
+  balls[i].color = WHITE;
 
 	MACHINE_EPS = sqrt(MINFLOAT);
 
 	/* Make sure that all the balls are initialised */
-	ClearAllBalls();
+//	ClearAllBalls();
 }
 
 //void FreeBall(Display *display)
@@ -225,24 +229,24 @@ void InitialiseBall(Ball balls[], char *texturePath, Vector2 startPos, int radiu
 //	}
 //}
 
-void RedrawBall(Display *display, Window window)
-{
-	/* not hard - STILL TO BE IMPLEMENTED */
-}
+//void RedrawBall(Display *display, Window window)
+//{
+//	/* not hard - STILL TO BE IMPLEMENTED */
+//}
 
 static void EraseTheBall(Ball balls[], int eraseBall)
 {
 	/* 
 	 * Clear the ball area! The x, y coordinates are the centre of ball 
 	 */
-  UnloadTexture(balls[eraseBall]->texture);
+  UnloadTexture(balls[eraseBall].texture);
 
     
 }
 
 void DrawTheBall(Ball balls[], int theBall)
 {
-  DrawTexture(balls[theBall]->texture, balls[theBall]->position.x - (balls[theBall]->radius / 2), balls[theBall]->position.y - (balls[theBall]->radius / 2), balls[theBall]->color);
+  DrawTexture(balls[theBall].texture, balls[theBall].position.x - (balls[theBall].radius / 2), balls[theBall].position.y - (balls[theBall].radius / 2), balls[theBall].color);
 }
 
 //void DrawTheBallBirth(Display *display, Window window, int x, int y, int slide)
@@ -281,7 +285,7 @@ void DrawTheBall(Ball balls[], int theBall)
  //       DrawTheBallBirth(display, window, x, y, slide);
 //}
 
-static void MoveBall(Ball balls[], int theBalls)
+static void MoveBall(Ball balls[], int theBall)
 {
 	/*
 	 * Move the ball from one position to the next and also update the
@@ -293,8 +297,8 @@ static void MoveBall(Ball balls[], int theBalls)
 		//EraseTheBall(display, window, balls[i].oldx, balls[i].oldy);
 
 	/* Update the old position of this ball */
-	balls[theBall]->position.x += balls[theBall]->velocity.x;
-	balls[theBall]->position.y += balls[theBall]->velocity.y;
+	balls[theBall].position.x += balls[theBall].velocity.x;
+	balls[theBall].position.y += balls[theBall].velocity.y;
 
 
 	//if (Killer == True)
@@ -379,8 +383,8 @@ static void MoveBall(Ball balls[], int theBalls)
 //	}
 //}
 
-void DoBoardTilt(Display *display, int i)
-{
+//void DoBoardTilt(Display *display, int i)
+//{
 	/*
 	 * In the event of a ball loop bounce then this function will fiddle
 	 * with the velocity and it may just jump out of the loop.
@@ -397,10 +401,10 @@ void DoBoardTilt(Display *display, int i)
 //	
 //		RandomiseBallVelocity(i);
 //	}
-}
+//}
 
-static void TeleportBall(Display *display, Window window, int i)
-{
+//static void TeleportBall(Display *display, Window window, int i)
+//{
 	/* 
 	 * This function will teleport the ball to some other space not occupied
 	 * and start off there.
@@ -510,7 +514,7 @@ static void TeleportBall(Display *display, Window window, int i)
 //	updateBallVariables(i);
 //
 //	DEBUG("Ball was NOT Teleported.");
-}
+//}
 
 //void SplitBallInTwo(Display *display, Window window)
 //{
@@ -662,8 +666,8 @@ static void TeleportBall(Display *display, Window window, int i)
 //   	return False;
 //}
 
-static int HandleTheBlocks()
-{
+//static int HandleTheBlocks()
+//{
 	/*
 	 * When a ball hits a block it calls this routine and this routine
 	 * will perform the function relevant to that block. eg: teleport
@@ -893,20 +897,20 @@ static int HandleTheBlocks()
 //	return False;
 //}
 
-static void UpdateABall(Ball balls[], int i)
+void UpdateABall(Ball balls[], int i)
 {
 	/*
 	 * Main routine that will update the ball given and handle all collisions
 	 * and also bouce off all walls and blocks.
 	 */
   //check for colision for top/bottom playfield
-  if((balls[i]->position.y + balls[i]->radius <= (WINDOW_HEIGHT / 2) - (PLAY_HEIGHT / 2)) || 
-    (balls[i]->position.y + balls[i]->radius >= (WINDOW_HEIGHT / 2) + (PLAY_HEIGHT / 2)))
-    balls[i]->velocity.y = balls[i]->velocity.y * -1;
+  if((balls[i].position.y - balls[i].radius/2 <= (WINDOW_HEIGHT / 2) - (PLAY_HEIGHT / 2)) || 
+    (balls[i].position.y + balls[i].radius/2 >= (WINDOW_HEIGHT / 2) + (PLAY_HEIGHT / 2)))
+    balls[i].velocity.y = balls[i].velocity.y * -1;
   //check for collision with left/right of playfield
-  if((balls[i]->position.x + balls[i]->radius <= (WINDOW_WIDTH / 2) - (PLAY_WIDTH / 2)) || 
-    (balls[i]->position.x + balls[i]->radius >= (WINDOW_WIDTH / 2) + (PLAY_WIDTH / 2)))
-    balls[i]->velocity.x = balls[i]->velocity.x * -1;
+  if((balls[i].position.x - balls[i].radius/2 <= (WINDOW_WIDTH / 2) - (PLAY_WIDTH / 2)) || 
+    (balls[i].position.x + balls[i].radius/2 >= (WINDOW_WIDTH / 2) + (PLAY_WIDTH / 2)))
+    balls[i].velocity.x = balls[i].velocity.x * -1;
    /*	int row, col, hitPos, ret, t;
 	int cx, cy, step, j, r, ddx, ddy, Hx, Hy;
 	float incx, incy, x, y;
@@ -914,8 +918,8 @@ static void UpdateABall(Ball balls[], int i)
 	float dummy;
 */
 	/* Update ball position using dx and dy values */	
-	balls[i]->position.x += balls[i]->velocity.x;
-  balls[i]->position.y += balls[i]->velocity.y;
+	balls[i].position.x += balls[i].velocity.x;
+  balls[i].position.y += balls[i].velocity.y;
 
 	/* Mark the ball to die as it is past the paddle */
 //	if (balls[i].bally > (PLAY_HEIGHT - DIST_BASE + BALL_HEIGHT))
@@ -936,7 +940,7 @@ static void UpdateABall(Ball balls[], int i)
 	//	MoveBall(display, window, balls[i].ballx, balls[i].bally, True, i);
 
 		//return;
-	}
+//	}
 
 	/* Check if ball has hit right wall and bounce off */		
 	//if (balls[i].ballx > (PLAY_WIDTH - BALL_WC) && noWalls == False)
@@ -1040,7 +1044,7 @@ static void UpdateABall(Ball balls[], int i)
 			 */
 //			if (balls[i].lastPaddleHitFrame <= frame)
 //				DoBoardTilt(display, i);
-		}
+//		}
 
 //       	Vx = (float) balls[i].dx;
 //       	Vy = (float) balls[i].dy;
@@ -1480,10 +1484,8 @@ static void updateBallVariables(int i)
 	 * waiting to be shot off. Also ball birth.
 	 */
 
-	balls[i].ballx 	= paddlePos;
-	balls[i].bally 	= PLAY_HEIGHT - DIST_BALL_OF_PADDLE;
-	balls[i].oldx 	= balls[i].ballx;
-	balls[i].oldy 	= balls[i].bally;
+	balls[i].position.x 	= GetRenderWidth() / 2;
+	balls[i].position.y 	= GetRenderHeight() / 2;
 }
 
 int GetNumberOfActiveBalls(void)
@@ -1552,10 +1554,10 @@ static void ChangeBallDirectionToGuide(int i)
 	int dx, dy;
 
 	dx = dy = 0;
-
+/*
 	switch (guidePos)
 	{
-		/* Left to middle to right */
+		* Left to middle to right *
 		case 0: dx = -5; dy = -1; break;
 
 		case 1: dx = -4; dy = -2; break;
@@ -1578,171 +1580,172 @@ static void ChangeBallDirectionToGuide(int i)
 
 		case 10: dx = 5; dy = -1; break;
 	}
+*/
 
 	/* Make the ball go off in the direction of the guide */
-	balls[i].dx	= dx; balls[i].dy	= dy;
+	balls[i].velocity.x	= dx; balls[i].velocity.y	= dy;
 
-	DEBUG("Changed ball start direction to guide.");
+	//DEBUG("Changed ball start direction to guide.");
 }
 
-int ActivateWaitingBall(Display *display, Window window)
-{
+//int ActivateWaitingBall(Display *display, Window window)
+//{
 	/* 
 	 * Loop through all balls and find the first one that is ready to
 	 * be activated and activate it. Also erase the guide marker.
 	 */
-	int i;
+//	int i;
 
 	/* Zap through the list of balls */
-	for (i = 0; i < MAX_BALLS; i++)
-	{
+//	for (i = 0; i < MAX_BALLS; i++)
+//	{
 		/* Ok it must be on the paddle so shoot it off */
-		if (balls[i].ballState == BALL_READY)
-		{
+//		if (balls[i].ballState == BALL_READY)
+//		{
 			/* Change the balls mode so that it shoots off */
-			ChangeBallMode(BALL_ACTIVE, i);
-			balls[i].lastPaddleHitFrame = frame + PADDLE_BALL_FRAME_TILT;
+//			ChangeBallMode(BALL_ACTIVE, i);
+//			balls[i].lastPaddleHitFrame = frame + PADDLE_BALL_FRAME_TILT;
 
-			ChangeBallDirectionToGuide(i);
-			MoveGuides(display, window, i, True);
+//			ChangeBallDirectionToGuide(i);
+//			MoveGuides(display, window, i, True);
 
-			return True;
-		}
-	}
+//			return True;
+//		}
+//	}
 
-	return False;
-}
+//	return False;
+//}
 
-void ResetBallStart(Display *display, Window window)
-{
+//void ResetBallStart(Display *display, Window window)
+//{
 	/*
 	 * Add a new ball and create it on the paddle. It will then wait to be
 	 * activated and have guides above it until activated.
 	 */
 
-	int i;
+//	int i;
 
-	i = AddANewBall(display, 0, 0, 3, -3);
-	if (i >= 0)
-	{
+//	i = AddANewBall(display, 0, 0, 3, -3);
+//	if (i >= 0)
+//	{
 		/* Make sure that all variables are updated */
-		updateBallVariables(i);
+//		updateBallVariables(i);
 
 		/* Add 2 bullets every ball death or creation as it happens */
-		AddABullet(display);
-		AddABullet(display);
+//		AddABullet(display);
+//		AddABullet(display);
 
 		/* Set up animation for ball creation */
-		SetBallWait(BALL_CREATE, frame + 1, i);
+//		SetBallWait(BALL_CREATE, frame + 1, i);
 
-		DEBUG("Reset ball start and create.");
-	}
-}
+//		DEBUG("Reset ball start and create.");
+//	}
+//}
 
-static void AnimateBallPop(Display *display, Window window, int i)
-{
+//static void AnimateBallPop(Display *display, Window window, int i)
+//{
 	/*
 	 * Animate a ball popping and then kill it off.
 	 */
 
-	static int slide = BIRTH_SLIDES + 1;
+//	static int slide = BIRTH_SLIDES + 1;
 
-	if (frame == balls[i].nextFrame)
-	{
-		/* We are imploding so go backwards through slides */
-		slide--;
-
+//	if (frame == balls[i].nextFrame)
+//	{
+//		/* We are imploding so go backwards through slides */
+//		slide--;
+//
 		/* Wait for the next frame */
-		balls[i].nextFrame += BIRTH_FRAME_RATE;
+//		balls[i].nextFrame += BIRTH_FRAME_RATE;
 
 		/* First frame is to clear the ball away */
-		if (slide == BIRTH_SLIDES)
-		{
+//		if (slide == BIRTH_SLIDES)
+//		{
 			/* Clear the ball area */
-    		EraseTheBall(display, window, balls[i].oldx, balls[i].oldy);
-			slide--;
-		}
+//    		EraseTheBall(display, window, balls[i].oldx, balls[i].oldy);
+//			slide--;
+//		}
 
-		if (slide < 0)
-		{
+//		if (slide < 0)
+//		{
 			/* Erase the ball birth image */
-			MoveBallBirth(display, window, 
-				balls[i].oldx, balls[i].oldy, -1, True, i);
+//			MoveBallBirth(display, window, 
+//				balls[i].oldx, balls[i].oldy, -1, True, i);
 
-			slide = BIRTH_SLIDES + 1;
+//			slide = BIRTH_SLIDES + 1;
 
 			/* Stop the ball by killing it! */
-			ClearBall(i);
-			ResetBallStart(display, window);
-			DeadBall(display, window);
-		}
-		else
+//			ClearBall(i);
+//			ResetBallStart(display, window);
+//			DeadBall(display, window);
+//		}
+//		else
 			/* Draw ball birth - handles ball moving as well */
-			MoveBallBirth(display, window, 
-				balls[i].oldx, balls[i].oldy, slide, True, i);
-	}
-}
+//			MoveBallBirth(display, window, 
+//				balls[i].oldx, balls[i].oldy, slide, True, i);
+//	}
+//}
 
-static void AnimateBallCreate(Display *display, Window window, int i)
-{
+//static void AnimateBallCreate(Display *display, Window window, int i)
+//{
 	/*
 	 * Animate a ball being created and then make it READY on the paddle.
 	 */
 
-	static int slide = 0;
+//	static int slide = 0;
 
 	/* Draw the ball birth at the new position */
-	MoveBallBirth(display, window, paddlePos, 
-		PLAY_HEIGHT - DIST_BALL_OF_PADDLE, slide, True, i);
+//	MoveBallBirth(display, window, paddlePos, 
+//		PLAY_HEIGHT - DIST_BALL_OF_PADDLE, slide, True, i);
 
-	if (frame == balls[i].nextFrame)
-	{
+//	if (frame == balls[i].nextFrame)
+//	{
 		/* Next slide thanks */
-		slide++;
+//		slide++;
 
 		/* Frame that will trigger the new slide */
-		balls[i].nextFrame += BIRTH_FRAME_RATE;
+//		balls[i].nextFrame += BIRTH_FRAME_RATE;
 
-		if (slide == BIRTH_SLIDES)
-		{
+//		if (slide == BIRTH_SLIDES)
+//		{
 			/* Erase the ball birth image */
-			MoveBallBirth(display, window, 
-				paddlePos, PLAY_HEIGHT - DIST_BALL_OF_PADDLE, -1, 
-				True, i);
+//			MoveBallBirth(display, window, 
+//				paddlePos, PLAY_HEIGHT - DIST_BALL_OF_PADDLE, -1, 
+//				True, i);
 
-			slide = 0;
+//			slide = 0;
 
-			updateBallVariables(i);
+//			updateBallVariables(i);
+//
+//			MoveBall(display, window, paddlePos, 
+//				PLAY_HEIGHT - DIST_BALL_OF_PADDLE, True, i);
 
-			MoveBall(display, window, paddlePos, 
-				PLAY_HEIGHT - DIST_BALL_OF_PADDLE, True, i);
-
-			ChangeBallMode(BALL_READY, i);
+//			ChangeBallMode(BALL_READY, i);
 
 			/* This frame will trigger the auto shoot off the ball if you
 			 * don't press space within a specified time 
 			 */
-			balls[i].nextFrame = frame + BALL_AUTO_ACTIVE_DELAY;
-		}
-		else
-			MoveBallBirth(display, window, 
-				paddlePos, PLAY_HEIGHT - DIST_BALL_OF_PADDLE, 
-				slide, True, i);
+//			balls[i].nextFrame = frame + BALL_AUTO_ACTIVE_DELAY;
+//		}
+//		else
+//			MoveBallBirth(display, window, 
+//				paddlePos, PLAY_HEIGHT - DIST_BALL_OF_PADDLE, 
+//				slide, True, i);
 
-		if (paddleIsMoving())
-			updateBallVariables(i);
-	}
-}
+//		if (paddleIsMoving())
+//			updateBallVariables(i);
+//	}
+//}
 
-void ChangeBallMode(enum BallStates newMode, int i)
-{
+//void ChangeBallMode(enum BallStates newMode, int i)
+//{
 	/*
 	 * Change the mode of a ball to a new one.
 	 */
 
 	/* Change the ball mode */
-	balls[i].ballState = newMode;
-}
+//	balls[i]->ballState = newMode;
+//}
 
 static void SetBallWait(enum BallStates newMode, int waitFrame, int i)
 {
@@ -1751,8 +1754,8 @@ static void SetBallWait(enum BallStates newMode, int waitFrame, int i)
 	 */
 
 	/* Set up the ball waiting loop */
-	balls[i].waitingFrame	= waitFrame;
-	balls[i].waitMode 		= newMode;
+	//balls[i].waitingFrame	= waitFrame;
+	//balls[i].waitMode 		= newMode;
 	balls[i].ballState 		= BALL_WAIT;
 }
 
@@ -1763,14 +1766,14 @@ static void DoBallWait(int i)
 	 */
 
 	/* Once the waiting frame is reached then activate new state */
-	if (frame == balls[i].waitingFrame)
-	{
-		balls[i].nextFrame = frame + 10;
-		balls[i].ballState = balls[i].waitMode;
-	}
+//	if (frame == balls[i].waitingFrame)
+//  {
+//		balls[i].nextFrame = frame + 10;
+//		balls[i].ballState = balls[i].waitMode;
+	//}
 }
 
-int AddANewBall(Display *display, int x, int y, int dx, int dy)
+int AddANewBall(Ball balls[], int x, int y, int dx, int dy)
 {
 	/*
 	 * Function that adds a new ball.
@@ -1785,33 +1788,31 @@ int AddANewBall(Display *display, int x, int y, int dx, int dy)
 	for (i = 0; i < MAX_BALLS; i++)
 	{
 		/* Is the ball free for us to use? */
-		if (balls[i].active == False && GetNumberLife() >= 0)
-		{
+		//if (/*balls[i].active == False*/ /*&& GetNumberLife() >= 0*/)
+		//{
 			/* Make sure that it is clear */
 			ClearBall(i);
 
 			/* We have found a new ball spot so setup the ball */
 			balls[i].active 	= True;
-			balls[i].ballx 		= x;
-			balls[i].bally 		= y;
-			balls[i].oldx 		= balls[i].ballx;
-			balls[i].oldy 		= balls[i].bally;
-			balls[i].dx 		= dx;
-			balls[i].dy 		= dy;
+			balls[i].position.x 		= x;
+			balls[i].position.y 		= y;
+			balls[i].velocity.x 		= dx;
+			balls[i].velocity.y 		= dy;
 			balls[i].ballState 	= BALL_CREATE;
 			balls[i].mass 		= (rand() % (int)MAX_BALL_MASS) + MIN_BALL_MASS;
 			balls[i].slide 		= 0;
-			balls[i].nextFrame 	= frame + BIRTH_FRAME_RATE;
+		//	balls[i].nextFrame 	= frame + BIRTH_FRAME_RATE;
 
-			DEBUG("Added new ball to arena.");
+			//DEBUG("Added new ball to arena.");
 			return i;
-		}
+		//}
 	}
 
 	/* No more free balls available */
-	WarningMessage("Cannot create a new ball - all slots full.");
+	//WarningMessage("Cannot create a new ball - all slots full.");
 
-	DEBUG("Cannot create a new ball as all slots are full.");
+	//DEBUG("Cannot create a new ball as all slots are full.");
 
 	return -1;
 }
@@ -1828,14 +1829,12 @@ void ClearBall(int i)
 	balls[i].nextFrame 			= 0;
 	balls[i].newMode 			= BALL_NONE;
 	balls[i].active 			= False;
-	balls[i].oldx 				= 0;
-	balls[i].oldy 				= 0;
-	balls[i].ballx 				= 0;
-	balls[i].bally 				= 0;
-	balls[i].dx 				= 0;
-	balls[i].dy 				= 0;
+	balls[i].position.x 				= 0;
+	balls[i].position.y 				= 0;
+	balls[i].velocity.x 				= 0;
+	balls[i].velocity.y 				= 0;
 	balls[i].slide 				= 0;
-	balls[i].radius 			= BALL_WC;
+	balls[i].radius 			= 20;
 	balls[i].mass 			 	= MIN_BALL_MASS;
 	balls[i].ballState 			= BALL_CREATE;
 }
@@ -1848,7 +1847,7 @@ void ClearAllBalls(void)
 
 	int i;
 
-	DEBUG("Clearing all balls from slots.");
+	//DEBUG("Clearing all balls from slots.");
 
 	/* Clear all the balls in the balls array */
 	for (i = 0; i < MAX_BALLS; i++)
@@ -1858,77 +1857,73 @@ void ClearAllBalls(void)
 	}
 }
 
-void HandleBallMode(Display *display, Window window)
-{
+//void HandleBallMode(Display *display, Window window)
+//{
 	/*
 	 * Handle each active ball and handle each of their modes.
 	 *
 	 * This function is called very heavily. ;-(
 	 */
 
-	int i;
+//	int i;
 
 	/* Loop through all the balls */
-	for (i = 0; i < MAX_BALLS; i++)
-	{
+//	for (i = 0; i < MAX_BALLS; i++)
+//	{
 		/* Only handle active balls - sounds disgusting! :-) */
-		if (balls[i].active == True)
-		{
+//		if (balls[i].active == True)
+//		{
 			/* Switch on the state of the ball */
-			switch (balls[i].ballState)
-			{
-				case BALL_POP:		/* Ball pop animation */
-					AnimateBallPop(display, window, i);
-					break;
+//			switch (balls[i].ballState)
+//			{
+//				case BALL_POP:		/* Ball pop animation */
+//					AnimateBallPop(display, window, i);
+//					break;
 
-				case BALL_ACTIVE:	/* Animate the ball normally */
-					if ((frame % BALL_FRAME_RATE) == 0)
-						UpdateABall(display, window, i);
-					break;
+//				case BALL_ACTIVE:	/* Animate the ball normally */
+//					if ((frame % BALL_FRAME_RATE) == 0)
+//						UpdateABall(display, window, i);
+//					break;
+//
+//				case BALL_READY:	/* ball created and waiting to move */
+//					if (paddleIsMoving())
+//					{
+//						balls[i].ballx = paddlePos;
+//						balls[i].bally = PLAY_HEIGHT - DIST_BALL_OF_PADDLE;
 
-				case BALL_READY:	/* ball created and waiting to move */
-					if (paddleIsMoving())
-					{
-						balls[i].ballx = paddlePos;
-						balls[i].bally = PLAY_HEIGHT - DIST_BALL_OF_PADDLE;
+//						MoveBall(display, window, balls[i].ballx, 
+//							balls[i].bally, True, i);
+//					}
 
-						MoveBall(display, window, balls[i].ballx, 
-							balls[i].bally, True, i);
-					}
+//					if ((frame % (BALL_FRAME_RATE)) == 0)
+//						MoveGuides(display, window, i, False);
+//
+//					/* After a certain number of seconds fire off anyway */
+//					if (frame == balls[i].nextFrame)
+//					{
+//						ChangeBallMode(BALL_ACTIVE, i);
+//						ChangeBallDirectionToGuide(i);
+//						MoveGuides(display, window, i, True);
+//					}
+//					break;
 
-					if ((frame % (BALL_FRAME_RATE)) == 0)
-						MoveGuides(display, window, i, False);
-
-					/* After a certain number of seconds fire off anyway */
-					if (frame == balls[i].nextFrame)
-					{
-						ChangeBallMode(BALL_ACTIVE, i);
-						ChangeBallDirectionToGuide(i);
-						MoveGuides(display, window, i, True);
-					}
-					break;
-
-				case BALL_STOP:		/* Ball dead and stopped */
-					break;
-
-				case BALL_CREATE:	/* Create ball animation */
-					AnimateBallCreate(display, window, i);
-					break;
-
-				case BALL_WAIT:		/* In wait mode waiting to change state */
-					DoBallWait(i);
-					break;
-
-				case BALL_DIE:		/* Ball is going to die */
-					if ((frame % BALL_FRAME_RATE) == 0)
-						UpdateABall(display, window, i);
-					break;
-
-				case BALL_NONE:		/* Really cool mode ;-) */
-				default:
-					break;
-
-			}	/* Ball modes */
-		}	/* If active */	
-	}	/* For loop */
-}
+//				case BALL_STOP:		/* Ball dead and stopped */
+//					break;
+//
+//				case BALL_CREATE:	/* Create ball animation */
+//					AnimateBallCreate(display, window, i);
+//					break;
+//
+//				case BALL_WAIT:		/* In wait mode waiting to change state */
+//					DoBallWait(i);
+//					break;
+//
+//				case BALL_DIE:		/* Ball is going to die */
+//					if ((frame % BALL_FRAME_RATE) == 0)
+//						UpdateABall(display, window, i);
+//					break;
+//
+//				case BALL_NONE:		/* Really cool mode ;-) *.//				default:
+//					break;.//			}	/* Ball modes */
+//		}	/* If active */.//	}	/* For loop */
+//}

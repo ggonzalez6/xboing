@@ -51,8 +51,13 @@
  */
 
 // TODO: Remove x11 #include <X11/Xlib.h>
-#include <faketypes.h>
+//#include <faketypes.h>
 
+#include <raylib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+//#include <values.h>
 /*
  *  Constants and macros:
  */
@@ -94,6 +99,10 @@
 #define PLAY_WIDTH 495
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 582
+//const int False = 0;
+//const int True = 1;
+#define True 0
+#define False 1
 /*
  *  Type declarations:
  */
@@ -110,7 +119,7 @@ enum BallStates
 	BALL_NONE 
 };
 
-typedef struct ball
+typedef struct Ball
 {
 	enum BallStates	waitMode;		/* Ball waiting mode */
 	int				waitingFrame;	/* Frame to wait until */
@@ -127,36 +136,73 @@ typedef struct ball
     enum BallStates	ballState;		/* The state of the ball */
   Color color;
   Texture2D texture;
-} BALL;
+} Ball;
 
 /*
  *  Function prototypes:
  */
+//added
+void UpdateABall(Ball balls[], int i);
 
-void InitialiseBall(Ball *ball, char *texturePath, Vector2 startPos);
-void FreeBall(Display *display);
-void RedrawBall(Display *display, Window window);
-void DrawTheBall(Display *display, Window window, int x, int y, int slide);
-void DrawTheBallBirth(Display *display, Window window, int x, int y, int slide);
-void KillBallNow(Display *display, Window window, int i);
-void GetBallPosition(int *ballX, int *ballY, int i);
-void ResetBallStart(Display *display, Window window);
-int GetBallMode(int i);
-void ChangeBallMode(enum BallStates newMode, int i);
-int AddANewBall(Display *display, int x, int y, int dx, int dy);
+//NOTE:  all commented out functions are likely either animations or powerups
+//       exceptions will be commented
+void InitialiseBall(Ball balls[], int i, char *texturePath, Vector2 startPos, float radius);
+//void FreeBall(Display *display);
+
+//not even implimented
+//void RedrawBall(Display *display, Window window);
+
+void DrawTheBall(Ball balls[], int theBall);
+//void DrawTheBallBirth(Display *display, Window window, int x, int y, int slide);
+
+//will be needed for demo
+//void KillBallNow(Display *display, Window window, int i);
+
+//should be accessible anyways
+//void GetBallPosition(int *ballX, int *ballY, int i);
+
+//needed for demo
+//void ResetBallStart(Display *display, Window window);
+
+//not even implimented
+//int GetBallMode(int i);
+
+//likely needed for demo
+//void ChangeBallMode(enum BallStates newMode, int i);
+
+int AddANewBall(Ball balls[],  int x, int y, int dx, int dy);
 void ClearAllBalls(void);
-void HandleBallMode(Display *display, Window window);
-int StartAnotherBall(Display *display, Window window);
-int IsBallWaiting(void);
-void ClearBall(int i);
-void SplitBallInTwo(Display *display, Window window);
-void ClearBallNow(Display *display, Window window, int i);
-int GetAnActiveBall(void);
-int ActivateWaitingBall(Display *display, Window window);
-int GetNumberOfActiveBalls(void);
-void DoBoardTilt(Display *display, int i);
 
-extern BALL balls[MAX_BALLS];
+//demo
+//void HandleBallMode(Display *display, Window window);
+
+//not implimented
+//int StartAnotherBall(Display *display, Window window);
+
+//probably wont be used until demo. should compile
+int IsBallWaiting(void);
+
+void ClearBall(int i);
+
+//powerups not in scope rn
+//void SplitBallInTwo(Display *display, Window window);
+
+//current functions shoudl suffice
+//void ClearBallNow(Display *display, Window window, int i);
+
+//easy to convert with no major overhauls. might not be used.
+int GetAnActiveBall(void);
+
+//deal with this in demo when ball states matter
+//int ActivateWaitingBall(Display *display, Window window);
+
+//easy to change. no powerups means no use however
+int GetNumberOfActiveBalls(void);
+
+//hopefully doesnt mess with collision too much
+//void DoBoardTilt(Display *display, int i);
+
+extern Ball balls[MAX_BALLS];
 extern int speedLevel;
 extern int paddleDx;
 

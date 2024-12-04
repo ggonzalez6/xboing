@@ -1,0 +1,19 @@
+# Define variables
+CFLAGS := $(shell pkg-config --cflags raylib)
+LDFLAGS := $(shell pkg-config --libs raylib) -framework OpenGL -framework Cocoa -framework IOKit
+CC := gcc
+
+# Source files
+SRC := balltest_main.c
+OBJ := main
+
+# Default target
+all: $(OBJ)
+
+# Build target
+$(OBJ): $(SRC)
+	$(CC) $(SRC) -o $(OBJ) $(CFLAGS) $(LDFLAGS)
+
+# Clean target
+clean:
+	rm -f $(OBJ)
